@@ -1,0 +1,402 @@
+const jsPsych = initJsPsych();
+const timeline = [];
+
+const video_config = {
+    type: chsRecord.VideoConfigPlugin,
+};
+
+//timeline.push(video_config);
+
+const video_consent = {
+    type: chsRecord.VideoConsentPlugin,
+    PIName: "Emily Foster-Hanson",
+    institution: "Swarthmore College",
+    PIContact: "Emily Foster-Hanson, PhD, Principal Investigator and Professor. Lab Website: https://kidlab.domains.swarthmore.edu. If you have any questions, you may contact Dr. Foster-Hanson at efoster3@swarthmore.edu",
+    payment: "For your participation in this study, you will emailed a $10 Giftogram gift card within a week of participation.To be eligible for the gift card: (1) your child must be in the age range for this study, (2) you and your child must speak English, (3) you need to submit a valid consent statement, and (4) we need to see that there is a parent/guardian and child present throughout the experiment. Each child is eligible to participate with a parent/guardian to receive a gift card only once; participants cannot do the study more than once for compensation. The compensation does not depend on finishing the whole study. If you have any questions about the study, feel free to contact the lab manager or the Principal Investigator, Emily Foster-Hanson, efoster3@swarthmore.edu. There are no direct benefits to you as a participant, but this research will help us understand various cognitive processes, which may benefit society in a number of ways, including influencing legal and public policy, as well as improving pedagogy. Risks associated with participation in this study are minimal. You may feel slight discomfort answering some questions, but you may refrain from answering any questions that make you uncomfortable and may withdraw your participation at any time even after completing the study without penalty.",
+    procedures: "You may be asked to [CHANGE].Your total expected time commitment for this study is: 20 minutes. Please make sure both child and parent are visible in the webcam.",
+    purpose: "[CHANGE]",
+};
+
+//timeline.push(video_consent);
+
+const start = {
+    type: chsRecord.StartRecordPlugin,
+};
+
+//timeline.push(start);
+
+
+// --------
+
+
+//enter fullscreen
+const enter_fullscreen = { //to enter full screen, it asks the user to press a button in order for them to enter the full screen mode.
+    type: jsPsychFullscreen,
+    fullscreen_mode: true
+};
+
+timeline.push(enter_fullscreen);
+
+
+//test
+const hello_trial = {
+    type: jsPsychHtmlButtonResponse,
+    stimulus: 'Click on this button to continue!',
+    choices: ['Next'],
+    margin_vertical: '10px',
+    margin_horizontal: '10px',
+    // button_html: '<button style="background-color: blue; color: white;">%choice%</button>'
+
+};
+
+timeline.push(hello_trial);
+
+
+
+
+//systems thinking tasks (NOT FULL ASSETS) //will write in a diff file then paste here/
+// fix URLs/assets later
+const attncheck_right = {
+    type: jsPsychVideoKeyboardResponse,
+    stimulus: ["https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/sys_think_attncheck_q1_right_ver_f.mp4"], //change url later
+    width: 0.5,
+    height: 0.5,
+    // choices: "NO_KEYS",
+    trial_ends_after_video: true,
+    // stimulus: "you clicked right",
+    // choices: ["Next"]
+    // maintain_aspect_ratio: true
+
+};
+
+const attncheck_wrong = {
+    type: jsPsychVideoKeyboardResponse,
+    stimulus: ["https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/sys_think_attncheck_q1_wrong_ver_f.mp4"],
+    // width: 1000,
+    // height: 600,
+    // choices: "NO_KEYS",
+    trial_ends_after_video: true
+    // stimulus: "you clicked left",
+    // choices: ["Next"]
+};
+
+//https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/sys_think_attncheck_q1_right.m4v
+
+const sys_think_attncheck_q1 = {
+    type: jsPsychVideoHotspots,
+    stimulus: "https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/sys_think_attncheck_q1_ver_f.mp4",
+    width: 600,
+    maintain_aspect_ratio: true,
+    // height: 600,
+    hotspots: [{
+            id: "left",
+            x: 745,
+            y: 290,
+            width: 350,
+            height: 300,
+        },
+        {
+            id: "right",
+            x: 1215,
+            y: 200,
+            width: 380,
+            height: 380,
+        }
+    ],
+    hotspot_highlight_css: 'background-color: rgba(255, 0, 0, 0.3); border: 2px solid red;',
+
+}; // --------
+
+timeline.push(sys_think_attncheck_q1);
+
+const if_right = {
+    timeline: [attncheck_right],
+    conditional_function: function() {
+        let last = jsPsych.data.getLastTrialData().last(1).values()[0];
+        if (last.hotspot_clicked === 'left') { //can make one line later
+            return true;
+        } else {
+            return false;
+        }
+    }
+};
+
+const if_wrong = {
+    timeline: [attncheck_wrong],
+    conditional_function: function() {
+        let last = jsPsych.data.getLastTrialData().last(1).values()[0];
+        if (last.hotspot_clicked === 'right') {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+};
+
+timeline.push(if_right);
+timeline.push(if_wrong);
+
+
+const attncheck2_right = {
+    type: jsPsychVideoKeyboardResponse,
+    stimulus: ["https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/sys_think_attncheck_q2_right_ver_f.mp4"], //change url later
+    // width: 1000,
+    // height: 600,
+    // choices: "NO_KEYS",
+    trial_ends_after_video: true
+    // stimulus: "you clicked right",
+    // choices: ["Next"]
+
+};
+
+const attncheck2_wrong = {
+    type: jsPsychVideoKeyboardResponse,
+    stimulus: ["https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/sys_think_attncheck_q2_wrong_ver_f.mp4"],
+    // width: 1000,
+    // height: 600,
+    // choices: "NO_KEYS",
+    trial_ends_after_video: true
+    // stimulus: "you clicked left",
+    // choices: ["Next"]
+};
+const sys_think_attncheck_q2 = {
+    type: jsPsychVideoHotspots,
+    stimulus: "https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/sys_think_attncheck_q2_ver_f.mp4",
+    // width: 1000,
+    // height: 600,
+    hotspots: [{
+            id: "left",
+            x: 300,
+            y: 300,
+            width: 325,
+            height: 325,
+        },
+        {
+            id: "right",
+            x: 1215,
+            y: 200,
+            width: 380,
+            height: 380,
+        }
+    ],
+    hotspot_highlight_css: 'background-color: rgba(255, 0, 0, 0.3); border: 2px solid red;',
+
+}; // --------
+
+timeline.push(sys_think_attncheck_q2);
+
+const if_right2 = {
+    timeline: [attncheck2_right],
+    conditional_function: function() {
+        let last = jsPsych.data.getLastTrialData().last(1).values()[0];
+        if (last.hotspot_clicked === 'right') { //can make one line later
+            return true;
+        } else {
+            return false;
+        }
+    }
+};
+
+const if_wrong2 = {
+    timeline: [attncheck2_wrong],
+    conditional_function: function() {
+        let last = jsPsych.data.getLastTrialData().last(1).values()[0];
+        if (last.hotspot_clicked === 'left') {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+};
+
+timeline.push(if_right2);
+timeline.push(if_wrong2);
+
+
+const attncheck3_right = {
+    type: jsPsychVideoKeyboardResponse,
+    stimulus: ["https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/sys_think_attncheck_q3_right_ver_f.mp4"], //
+    // width: 1000,
+    // height: 600,
+    // choices: "NO_KEYS",
+    trial_ends_after_video: true
+    // stimulus: "you clicked right",
+    // choices: ["Next"]
+
+};
+
+const attncheck3_wrong = {
+    type: jsPsychVideoKeyboardResponse,
+    stimulus: ["https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/sys_think_attncheck_q3_right_ver_f.mp4"], //change later, asset is missing
+    // width: 1000,
+    // height: 600,
+    // choices: "NO_KEYS",
+    trial_ends_after_video: true
+    // stimulus: "you clicked left",
+    // choices: ["Next"]
+};
+
+//https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/sys_think_attncheck_q1_right.m4v
+
+//------ Attempt at counterbalancing attncheck 3 
+
+
+//attncheck 3 counterbalancing
+// things that change for counterbalancing
+const attncheck3_c1 = {
+    stimulus: "https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/sys_think_attncheck_q3_ny_ver_f.mp4",
+    id_left: "Yes",
+    id_right: "No"
+};
+const attncheck3_c2 = {
+    stimulus: "https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/sys_think_attncheck_q3_ny_ver_f.mp4",
+    id_left: "No",
+    id_right: "Yes"
+};
+
+// randomly select c1 or c2
+const rand_square_selection = jsPsych.randomization.sampleWithoutReplacement([attncheck3_c1, attncheck3_c2], 1)[0];
+
+
+// use your variable wherever things are randomly selected
+const warmup_trial_intro = {
+    type: jsPsychVideoHotspots,
+    stimulus: rand_square_selection.stimulus,
+    hotspots: [{
+            id: rand_square_selection.id_left,
+            x: 100,
+            y: 150,
+            width: 325,
+            height: 325,
+        },
+        {
+            id: rand_square_selection.id_right,
+            x: 600,
+            y: 150,
+            width: 325,
+            height: 325,
+        }
+    ],
+    hotspot_highlight_css: 'background-color: rgba(255, 0, 0, 0.3); border: 2px solid red;'
+};
+
+
+timeline.push(warmup_trial_intro);
+
+const if_right3 = {
+    timeline: [attncheck3_right],
+    conditional_function: function() {
+        let last = jsPsych.data.getLastTrialData().last(1).values()[0];
+        if (last.hotspot_clicked === 'No') { //can make one line later
+            return true;
+        } else {
+            return false;
+        }
+    }
+};
+
+const if_wrong3 = {
+    timeline: [attncheck3_wrong],
+    conditional_function: function() {
+        let last = jsPsych.data.getLastTrialData().last(1).values()[0];
+        if (last.hotspot_slicked === 'Yes') {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+};
+
+timeline.push(if_right3);
+timeline.push(if_wrong3);
+
+//------
+
+const sys_think_scenario = {
+    type: jsPsychVideoKeyboardResponse,
+    stimulus: ["https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/sys_think_scenario_ver_f.mp4"], //change later, asset is missing
+    // width: 1000,
+    // height: 600,
+    // choices: "NO_KEYS",
+    // trial_ends_after_video: true,
+    prompt: "Press the spacebar to say yes, change later",
+    // choices: ["Next"]
+};
+
+timeline.push(sys_think_scenario);
+
+const sys_think_scenario_q1 = {
+    type: jsPsychVideoButtonResponse,
+    stimulus: ["https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/sys_think_scenario_q1_ver_f.mp4"], //change later, asset is missing
+    // width: 1000,
+    // height: 600,
+    choices: ['continue'],
+    prompt: "<p>Press continue when you are done</p>",
+    response_allowed_while_playing: false
+    // trial_ends_after_video: true
+    // stimulus: "you clicked left",
+    // choices: ["Next"]
+};
+
+timeline.push(sys_think_scenario_q1);
+
+
+const sys_think_scenario_followup = {
+    type: jsPsychVideoButtonResponse,
+    stimulus: ["https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/sys_think_scenario_followup_ver_f.mp4"], //change later, asset is missing
+    // width: 1000,
+    // height: 600,
+    // choices: "NO_KEYS",
+    choices: ['continue'],
+    prompt: "<p>Press continue when you are done</p>",
+    response_allowed_while_playing: false
+};
+
+
+timeline.push(sys_think_scenario_followup);
+
+const sys_think_scenario_q2 = {
+    type: jsPsychVideoButtonResponse,
+    stimulus: ["https://raw.githubusercontent.com/efosterhanson/CHS_stims/f8acf5dbca1ca581585af3b3a9d1ea78b3c7f6bf/ProjectSprouts/sys_think_scenario_q2_ver_f.mp4"], //change later, asset is missing
+    // width: 1000,
+    // height: 600,
+    choices: ['continue'],
+    prompt: "<p>Press continue when you are done</p>",
+    response_allowed_while_playing: false
+    // trial_ends_after_video: true
+    // stimulus: "you clicked left",
+    // choices: ["Next"]
+};
+
+timeline.push(sys_think_scenario_q2);
+
+
+const sys_think_scenario_followup2 = {
+    type: jsPsychVideoButtonResponse,
+    stimulus: ["https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/sys_think_scenario_followup_ver_f.mp4"], //change later, asset is missing
+    // width: 1000,
+    // height: 600,
+    // choices: "NO_KEYS",
+    choices: ['continue'],
+    prompt: "<p>Press continue when you are done</p>",
+    response_allowed_while_playing: false
+};
+
+
+timeline.push(sys_think_scenario_followup2);
+
+
+
+
+// const stop = {
+//     type: chsRecord.StopRecordPlugin,
+// };
+
+// const exit_survey = {
+//     type: chsSurvey.ExitSurveyPlugin,
+// };
+
+jsPsych.run(timeline);
