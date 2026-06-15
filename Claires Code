@@ -1,0 +1,1672 @@
+const jsPsych = initJsPsych();
+const timeline = [];
+
+const video_config = {
+    type: chsRecord.VideoConfigPlugin,
+};
+
+//timeline.push(video_config);
+
+const video_consent = {
+    type: chsRecord.VideoConsentPlugin,
+    PIName: "Emily Foster-Hanson",
+    institution: "Swarthmore College",
+    PIContact: "Emily Foster-Hanson, PhD, Principal Investigator and Professor. Lab Website: https://kidlab.domains.swarthmore.edu. If you have any questions, you may contact Dr. Foster-Hanson at efoster3@swarthmore.edu",
+    payment: "For your participation in this study, you will emailed a $10 Giftogram gift card within a week of participation.To be eligible for the gift card: (1) your child must be in the age range for this study, (2) you and your child must speak English, (3) you need to submit a valid consent statement, and (4) we need to see that there is a parent/guardian and child present throughout the experiment. Each child is eligible to participate with a parent/guardian to receive a gift card only once; participants cannot do the study more than once for compensation. The compensation does not depend on finishing the whole study. If you have any questions about the study, feel free to contact the lab manager or the Principal Investigator, Emily Foster-Hanson, efoster3@swarthmore.edu. There are no direct benefits to you as a participant, but this research will help us understand various cognitive processes, which may benefit society in a number of ways, including influencing legal and public policy, as well as improving pedagogy. Risks associated with participation in this study are minimal. You may feel slight discomfort answering some questions, but you may refrain from answering any questions that make you uncomfortable and may withdraw your participation at any time even after completing the study without penalty.",
+    procedures: "You may be asked to [CHANGE].Your total expected time commitment for this study is: 20 minutes. Please make sure both child and parent are visible in the webcam.",
+    purpose: "[CHANGE]",
+};
+
+//timeline.push(video_consent);
+
+const start = {
+    type: chsRecord.StartRecordPlugin,
+};
+
+//timeline.push(start);
+
+
+// --------
+
+
+//enter fullscreen
+const enter_fullscreen = {
+    type: jsPsychFullscreen,
+    fullscreen_mode: true,
+    on_load: () => {
+        const fullscreen_btn = document.getElementById('jspsych-fullscreen-btn');
+        if (fullscreen_btn) {
+            fullscreen_btn.style.fontSize = '30px';
+            fullscreen_btn.style.backgroundColor = 'lightgreen';
+        }
+    }
+};
+
+timeline.push(enter_fullscreen);
+
+
+// --------
+
+
+//warmup 1 trial
+// things that change for square left vs right
+const square_left = {
+    stimulus: "https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/warmup_intro_trial1_c1.m4v",
+    id_left: "triangle",
+    id_right: "square"
+};
+const square_right = {
+    stimulus: "https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/warmup_intro_trial1_c2.m4v",
+    id_left: "square",
+    id_right: "triangle"
+};
+
+// randomly select square left vs right
+const rand_square_selection = jsPsych.randomization.sampleWithoutReplacement([square_left, square_right], 1)[0];
+
+// print the selection for easier testing!
+console.log('left: ', rand_square_selection.id_left);
+
+// use your variable wherever things are randomly selected
+const warmup_trial_intro = {
+    type: jsPsychVideoHotspots,
+    stimulus: rand_square_selection.stimulus,
+    hotspots: [{
+            id: rand_square_selection.id_left,
+            x: 100,
+            y: 150,
+            width: 325,
+            height: 325,
+        },
+        {
+            id: rand_square_selection.id_right,
+            x: 600,
+            y: 150,
+            width: 325,
+            height: 325,
+        }
+    ],
+    hotspot_highlight_css: 'background-color: rgba(255, 0, 0, 0.3); border: 2px solid red;'
+};
+
+timeline.push(warmup_trial_intro);
+
+
+// --------
+
+
+//great job let's keep going
+const great_job = {
+    type: jsPsychVideoButtonResponse,
+    stimulus: ['https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/greatjobletskeepgoing.mp4'],
+    trial_ends_after_video: true,
+    choices: []
+};
+
+timeline.push(great_job);
+
+
+// --------
+
+
+//warmup 2 trial
+const warmup_trial_2 = {
+    type: jsPsychVideoButtonResponse,
+    stimulus: ['https://raw.githubusercontent.com/efosterhanson/CHS_stims/7bdfa487b5933e98a5fe19dd8a1182bae0bdb21c/ProjectSprouts/warmup_intro_trial2.mp4'],
+    choices: ['Next'],
+    button_html: (choice) => `<button style="font-size:2em; width: 150px; height: 100px; margin: 20px; background-color: lightblue; cursor: pointer;">${choice}</button>`,
+    response_allowed_while_playing: false
+};
+
+timeline.push(warmup_trial_2);
+
+
+// --------
+
+
+//warmup 2 great job
+const warmup_2_greatjob = {
+    type: jsPsychVideoButtonResponse,
+    stimulus: ['https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/greatjob_2.mp4'],
+    width: 640,
+    height: 360,
+    trial_ends_after_video: true,
+    choices: []
+};
+
+timeline.push(warmup_2_greatjob);
+
+
+// --------
+
+
+//triad trials tasks
+
+//ecological reasoning (included in the warmup 2 great job)
+// const ecological_reasoning = {
+//     type: jsPsychVideoButtonResponse,
+//     stimulus: ['https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/eco_reason_trans_video.mp4'],
+//     choices: ['Next'],
+//     response_allowed_while_playing: false
+// };
+
+// timeline.push(ecological_reasoning);
+
+//sarca -------
+const sarca_1 = {
+    stimulus: "https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/ind_sarca_vb_c1.m4v",
+    id_left: "bee",
+    id_right: "grass"
+};
+const sarca_2 = {
+    stimulus: "https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/ind_sarca_vb_c2.m4v",
+    id_left: "grass",
+    id_right: "bee"
+};
+
+// randomly select sarca 1 vs 2
+const rand_sarca_selection = jsPsych.randomization.sampleWithoutReplacement([sarca_1, sarca_2], 1)[0];
+
+//sarca task
+const sarca_task = {
+    type: jsPsychVideoHotspots,
+    stimulus: rand_sarca_selection.stimulus,
+    hotspots: [{
+            id: rand_sarca_selection.id_left,
+            x: 80,
+            y: 200,
+            width: 325,
+            height: 325,
+        },
+        {
+            id: rand_sarca_selection.id_right,
+            x: 600,
+            y: 200,
+            width: 325,
+            height: 325,
+        }
+    ],
+    hotspot_highlight_css: 'background-color: rgba(255, 0, 0, 0.3); border: 2px solid red;'
+};
+
+//kaki -------
+const kaki_1 = {
+    stimulus: "https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/ind_kaki_vb_c1_video.m4v",
+    id_left: "tree",
+    id_right: "kangaroo"
+};
+const kaki_2 = {
+    stimulus: "https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/ind_kaki_vb_c2_video.m4v",
+    id_left: "kangaroo",
+    id_right: "tree"
+};
+
+// randomly select kaki 1 vs 2
+const rand_kaki_selection = jsPsych.randomization.sampleWithoutReplacement([kaki_1, kaki_2], 1)[0];
+
+//kaki task
+const kaki_task = {
+    type: jsPsychVideoHotspots,
+    stimulus: rand_kaki_selection.stimulus,
+    hotspots: [{
+            id: rand_kaki_selection.id_left,
+            x: 100,
+            y: 200,
+            width: 325,
+            height: 325,
+        },
+        {
+            id: rand_kaki_selection.id_right,
+            x: 600,
+            y: 200,
+            width: 325,
+            height: 325,
+        }
+    ],
+    hotspot_highlight_css: 'background-color: rgba(255, 0, 0, 0.3); border: 2px solid red;'
+};
+
+//andro -------
+const andro_1 = {
+    stimulus: "https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/ind_andro_vb_c1.m4v",
+    id_left: "bullfrog",
+    id_right: "dandelion"
+};
+const andro_2 = {
+    stimulus: "https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/ind_andro_cattail_c2.m4v",
+    id_left: "dandelion",
+    id_right: "bullfrog"
+};
+
+// randomly select andro 1 vs 2
+const rand_andro_selection = jsPsych.randomization.sampleWithoutReplacement([andro_1, andro_2], 1)[0];
+
+//andro task
+const andro_task = {
+    type: jsPsychVideoHotspots,
+    stimulus: rand_andro_selection.stimulus,
+    hotspots: [{
+            id: rand_andro_selection.id_left,
+            x: 80,
+            y: 200,
+            width: 325,
+            height: 325,
+        },
+        {
+            id: rand_andro_selection.id_right,
+            x: 700,
+            y: 200,
+            width: 325,
+            height: 325,
+        }
+    ],
+    hotspot_highlight_css: 'background-color: rgba(255, 0, 0, 0.3); border: 2px solid red;'
+};
+
+//delp -------
+const delp_1 = {
+    stimulus: "https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/ind_delp_vb_c1_video.m4v",
+    id_left: "bluejay",
+    id_right: "whale"
+};
+const delp_2 = {
+    stimulus: "https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/ind_delp_vb_c2_video.m4v",
+    id_left: "whale",
+    id_right: "bluejay"
+};
+
+// randomly select delp 1 vs 2
+const rand_delp_selection = jsPsych.randomization.sampleWithoutReplacement([delp_1, delp_2], 1)[0];
+
+//delp task
+const delp_task = {
+    type: jsPsychVideoHotspots,
+    stimulus: rand_delp_selection.stimulus,
+    hotspots: [{
+            id: rand_delp_selection.id_left,
+            x: 80,
+            y: 200,
+            width: 325,
+            height: 325,
+        },
+        {
+            id: rand_delp_selection.id_right,
+            x: 600,
+            y: 200,
+            width: 325,
+            height: 325,
+        }
+    ],
+    hotspot_highlight_css: 'background-color: rgba(255, 0, 0, 0.3); border: 2px solid red;'
+};
+
+//glorp -------
+const glorp_1 = {
+    stimulus: "https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/ind_glorp_vb_c1_video.m4v",
+    id_left: "human",
+    id_right: "bear"
+};
+const glorp_2 = {
+    stimulus: "https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/ind_glorp_vb_c2_video.m4v",
+    id_left: "bear",
+    id_right: "human"
+};
+
+// randomly select glorp 1 vs 2
+const rand_glorp_selection = jsPsych.randomization.sampleWithoutReplacement([glorp_1, glorp_2], 1)[0];
+
+//glorp task
+const glorp_task = {
+    type: jsPsychVideoHotspots,
+    stimulus: rand_glorp_selection.stimulus,
+    hotspots: [{
+            id: rand_glorp_selection.id_left,
+            x: 80,
+            y: 200,
+            width: 325,
+            height: 325,
+        },
+        {
+            id: rand_glorp_selection.id_right,
+            x: 600,
+            y: 200,
+            width: 325,
+            height: 325,
+        }
+    ],
+    hotspot_highlight_css: 'background-color: rgba(255, 0, 0, 0.3); border: 2px solid red;'
+};
+
+//blap -------
+const blap_1 = {
+    stimulus: "https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/ind_blap_vb_c1.m4v",
+    id_left: "human",
+    id_right: "ant"
+};
+const blap_2 = {
+    stimulus: "https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/ind_blap_vb_c2_video.m4v",
+    id_left: "ant",
+    id_right: "human"
+};
+
+// randomly select blap 1 vs 2
+const rand_blap_selection = jsPsych.randomization.sampleWithoutReplacement([blap_1, blap_2], 1)[0];
+
+//blap task
+const blap_task = {
+    type: jsPsychVideoHotspots,
+    stimulus: rand_blap_selection.stimulus,
+    hotspots: [{
+            id: rand_blap_selection.id_left,
+            x: 80,
+            y: 200,
+            width: 325,
+            height: 325,
+        },
+        {
+            id: rand_blap_selection.id_right,
+            x: 600,
+            y: 200,
+            width: 325,
+            height: 325,
+        }
+    ],
+    hotspot_highlight_css: 'background-color: rgba(255, 0, 0, 0.3); border: 2px solid red;'
+};
+
+
+// randomly select the trials
+const triad_randomization_array = [sarca_task, kaki_task, andro_task, delp_task, glorp_task, blap_task];
+const triad_randomized = jsPsych.randomization.shuffleNoRepeats(triad_randomization_array);
+timeline.push(...triad_randomized);
+
+
+// --------
+
+
+//open ended trial
+const open_ended_trial = {
+    type: jsPsychVideoButtonResponse,
+    stimulus: ['https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/open_HI_video.mp4'],
+    choices: ['Next'],
+    button_html: (choice) => `<button style="font-size:2em; width: 150px; height: 100px; margin: 20px; background-color: lightblue; cursor: pointer;">${choice}</button>`,
+    response_allowed_while_playing: false
+};
+timeline.push(open_ended_trial);
+
+
+// --------
+
+
+//closeness to nature task
+
+//condition A (check box on the left)
+
+const check_c1 = {
+    stimulus: ["https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/closed_HI_intr_check_c1_video.mp4"],
+};
+
+const x_c1 = {
+    stimulus: ["https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/closed_HI_instr_x_c1_video.mp4"],
+};
+
+const closed_intr_c1 = {
+    timeline: [{
+            type: jsPsychVideoButtonResponse,
+            stimulus: check_c1.stimulus,
+            trial_ends_after_video: true,
+            choices: []
+        },
+        {
+            type: jsPsychVideoButtonResponse,
+            stimulus: x_c1.stimulus,
+            trial_ends_after_video: true,
+            choices: []
+        }
+    ]
+};
+
+//condition B (check box on the right)
+
+const check_c2 = {
+    stimulus: ["https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/closed_HI_instr_check_c2.mp4"]
+};
+
+const x_c2 = {
+    stimulus: ["https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/closed_HI_instr_x_c2.mp4"]
+};
+
+const closed_intr_c2 = {
+    timeline: [{
+            type: jsPsychVideoButtonResponse,
+            stimulus: check_c2.stimulus,
+            trial_ends_after_video: true,
+            choices: []
+        },
+        {
+            type: jsPsychVideoButtonResponse,
+            stimulus: x_c2.stimulus,
+            trial_ends_after_video: true,
+            choices: []
+        }
+    ]
+};
+
+//narrated
+
+//tree
+//c1
+const tree_1 = {
+    stimulus: "https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/closed_HI_object_tree_c1.mp4",
+    id_left: "check",
+    id_right: "x"
+};
+
+//c2
+const tree_2 = {
+    stimulus: "https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/closed_HI_object_tree_c2.mp4",
+    id_left: "x",
+    id_right: "check"
+};
+
+const tree_task_c1 = {
+    type: jsPsychVideoHotspots,
+    stimulus: tree_1.stimulus,
+    hotspots: [{
+            id: tree_1.id_left,
+            x: 125,
+            y: 350,
+            width: 325,
+            height: 325,
+        },
+        {
+            id: tree_1.id_right,
+            x: 845,
+            y: 350,
+            width: 325,
+            height: 325,
+        }
+    ],
+    hotspot_highlight_css: 'background-color: rgba(255, 0, 0, 0.3); border: 2px solid red;'
+};
+
+const tree_task_c2 = {
+    type: jsPsychVideoHotspots,
+    stimulus: tree_2.stimulus,
+    hotspots: [{
+            id: tree_2.id_left,
+            x: 125,
+            y: 350,
+            width: 325,
+            height: 325,
+        },
+        {
+            id: tree_2.id_right,
+            x: 845,
+            y: 350,
+            width: 325,
+            height: 325,
+        }
+    ],
+    hotspot_highlight_css: 'background-color: rgba(255, 0, 0, 0.3); border: 2px solid red;'
+};
+
+//scissors
+//c1
+const scissors_1 = {
+    stimulus: "https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/closed_HI_object_scissor_c1.mp4",
+    id_left: "check",
+    id_right: "x"
+};
+
+//c2
+const scissors_2 = {
+    stimulus: "https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/closed_HIobject_scissors_c2_vr2.m4v",
+    id_left: "x",
+    id_right: "check"
+};
+
+const scissors_task_c1 = {
+    type: jsPsychVideoHotspots,
+    stimulus: scissors_1.stimulus,
+    hotspots: [{
+            id: scissors_1.id_left,
+            x: 125,
+            y: 350,
+            width: 325,
+            height: 325,
+        },
+        {
+            id: scissors_1.id_right,
+            x: 845,
+            y: 350,
+            width: 325,
+            height: 325,
+        }
+    ],
+    hotspot_highlight_css: 'background-color: rgba(255, 0, 0, 0.3); border: 2px solid red;'
+};
+
+const scissors_task_c2 = {
+    type: jsPsychVideoHotspots,
+    stimulus: scissors_2.stimulus,
+    hotspots: [{
+            id: scissors_2.id_left,
+            x: 125,
+            y: 350,
+            width: 325,
+            height: 325,
+        },
+        {
+            id: scissors_2.id_right,
+            x: 845,
+            y: 350,
+            width: 325,
+            height: 325,
+        }
+    ],
+    hotspot_highlight_css: 'background-color: rgba(255, 0, 0, 0.3); border: 2px solid red;'
+};
+
+
+//randomize (tree, scissors)
+
+const narrated_array_c1 = [tree_task_c1, scissors_task_c1];
+const narrated_array_c2 = [tree_task_c2, scissors_task_c2];
+
+const narrated_c1 = jsPsych.randomization.shuffle(narrated_array_c1);
+const narrated_c2 = jsPsych.randomization.shuffle(narrated_array_c2);
+
+//non narrated
+
+//baby
+//c1
+const baby_1 = {
+    stimulus: "https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/closed_HI_object_baby_c1_video.m4v",
+    id_left: "check",
+    id_right: "x"
+};
+
+//c2
+const baby_2 = {
+    stimulus: "https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/closed_HI_object_baby_c2_video.m4v",
+    id_left: "x",
+    id_right: "check"
+};
+
+const baby_task_c1 = {
+    type: jsPsychVideoHotspots,
+    stimulus: baby_1.stimulus,
+    hotspots: [{
+            id: baby_1.id_left,
+            x: 75,
+            y: 275,
+            width: 325,
+            height: 325,
+        },
+        {
+            id: baby_1.id_right,
+            x: 650,
+            y: 275,
+            width: 325,
+            height: 325,
+        }
+    ],
+    hotspot_highlight_css: 'background-color: rgba(255, 0, 0, 0.3); border: 2px solid red;'
+};
+
+const baby_task_c2 = {
+    type: jsPsychVideoHotspots,
+    stimulus: baby_2.stimulus,
+    hotspots: [{
+            id: baby_2.id_left,
+            x: 75,
+            y: 275,
+            width: 325,
+            height: 325,
+        },
+        {
+            id: baby_2.id_right,
+            x: 650,
+            y: 275,
+            width: 325,
+            height: 325,
+        }
+    ],
+    hotspot_highlight_css: 'background-color: rgba(255, 0, 0, 0.3); border: 2px solid red;'
+};
+
+//adult
+//c1
+const adult_1 = {
+    stimulus: "https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/closed_HI_object_adult_video_c1.m4v",
+    id_left: "check",
+    id_right: "x"
+};
+
+//c2
+const adult_2 = {
+    stimulus: "https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/closed_HI_object_adult_c2_video.m4v",
+    id_left: "x",
+    id_right: "check"
+};
+
+const adult_task_c1 = {
+    type: jsPsychVideoHotspots,
+    stimulus: adult_1.stimulus,
+    hotspots: [{
+            id: adult_1.id_left,
+            x: 75,
+            y: 275,
+            width: 325,
+            height: 325,
+        },
+        {
+            id: adult_1.id_right,
+            x: 650,
+            y: 275,
+            width: 325,
+            height: 325,
+        }
+    ],
+    hotspot_highlight_css: 'background-color: rgba(255, 0, 0, 0.3); border: 2px solid red;'
+};
+
+const adult_task_c2 = {
+    type: jsPsychVideoHotspots,
+    stimulus: adult_2.stimulus,
+    hotspots: [{
+            id: adult_2.id_left,
+            x: 75,
+            y: 275,
+            width: 325,
+            height: 325,
+        },
+        {
+            id: adult_2.id_right,
+            x: 650,
+            y: 275,
+            width: 325,
+            height: 325,
+        }
+    ],
+    hotspot_highlight_css: 'background-color: rgba(255, 0, 0, 0.3); border: 2px solid red;'
+};
+
+//worm
+//c1
+const worm_1 = {
+    stimulus: "https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/closed_HI_object_worm_c1_video.m4v",
+    id_left: "check",
+    id_right: "x"
+};
+
+//c2
+const worm_2 = {
+    stimulus: "https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/closed_HI_object_worm_c2_video.m4v",
+    id_left: "x",
+    id_right: "check"
+};
+
+const worm_task_c1 = {
+    type: jsPsychVideoHotspots,
+    stimulus: worm_1.stimulus,
+    hotspots: [{
+            id: worm_1.id_left,
+            x: 75,
+            y: 275,
+            width: 325,
+            height: 325,
+        },
+        {
+            id: worm_1.id_right,
+            x: 650,
+            y: 275,
+            width: 325,
+            height: 325,
+        }
+    ],
+    hotspot_highlight_css: 'background-color: rgba(255, 0, 0, 0.3); border: 2px solid red;'
+};
+
+const worm_task_c2 = {
+    type: jsPsychVideoHotspots,
+    stimulus: worm_2.stimulus,
+    hotspots: [{
+            id: worm_2.id_left,
+            x: 75,
+            y: 275,
+            width: 325,
+            height: 325,
+        },
+        {
+            id: worm_2.id_right,
+            x: 650,
+            y: 275,
+            width: 325,
+            height: 325,
+        }
+    ],
+    hotspot_highlight_css: 'background-color: rgba(255, 0, 0, 0.3); border: 2px solid red;'
+};
+
+//squirrel
+//c1
+const squirrel_1 = {
+    stimulus: "https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/closed_HI_object_squirrel_c1_video.m4v",
+    id_left: "check",
+    id_right: "x"
+};
+
+//c2
+const squirrel_2 = {
+    stimulus: "https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/closed_HI_object_squirrel_c2_video.m4v",
+    id_left: "x",
+    id_right: "check"
+};
+
+const squirrel_task_c1 = {
+    type: jsPsychVideoHotspots,
+    stimulus: squirrel_1.stimulus,
+    hotspots: [{
+            id: squirrel_1.id_left,
+            x: 75,
+            y: 275,
+            width: 325,
+            height: 325,
+        },
+        {
+            id: squirrel_1.id_right,
+            x: 650,
+            y: 275,
+            width: 325,
+            height: 325,
+        }
+    ],
+    hotspot_highlight_css: 'background-color: rgba(255, 0, 0, 0.3); border: 2px solid red;'
+};
+
+const squirrel_task_c2 = {
+    type: jsPsychVideoHotspots,
+    stimulus: squirrel_2.stimulus,
+    hotspots: [{
+            id: squirrel_2.id_left,
+            x: 75,
+            y: 275,
+            width: 325,
+            height: 325,
+        },
+        {
+            id: squirrel_2.id_right,
+            x: 650,
+            y: 275,
+            width: 325,
+            height: 325,
+        }
+    ],
+    hotspot_highlight_css: 'background-color: rgba(255, 0, 0, 0.3); border: 2px solid red;'
+};
+
+
+//flower
+//c1
+const flower_1 = {
+    stimulus: "https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/closed_HI_object_flower_c1_video.m4v",
+    id_left: "check",
+    id_right: "x"
+};
+
+//c2
+const flower_2 = {
+    stimulus: "https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/closed_HI_object_flower_c2_video.m4v",
+    id_left: "x",
+    id_right: "check"
+};
+
+const flower_task_c1 = {
+    type: jsPsychVideoHotspots,
+    stimulus: flower_1.stimulus,
+    hotspots: [{
+            id: flower_1.id_left,
+            x: 75,
+            y: 275,
+            width: 325,
+            height: 325,
+        },
+        {
+            id: flower_1.id_right,
+            x: 650,
+            y: 275,
+            width: 325,
+            height: 325,
+        }
+    ],
+    hotspot_highlight_css: 'background-color: rgba(255, 0, 0, 0.3); border: 2px solid red;'
+};
+
+const flower_task_c2 = {
+    type: jsPsychVideoHotspots,
+    stimulus: flower_2.stimulus,
+    hotspots: [{
+            id: flower_2.id_left,
+            x: 75,
+            y: 275,
+            width: 325,
+            height: 325,
+        },
+        {
+            id: flower_2.id_right,
+            x: 650,
+            y: 275,
+            width: 325,
+            height: 325,
+        }
+    ],
+    hotspot_highlight_css: 'background-color: rgba(255, 0, 0, 0.3); border: 2px solid red;'
+};
+
+//rock
+//c1
+const rock_1 = {
+    stimulus: "https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/closed_HI_object_rock_c1_video.m4v",
+    id_left: "check",
+    id_right: "x"
+};
+
+//c2
+const rock_2 = {
+    stimulus: "https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/closed_HI_object_rock_c2_video.m4v",
+    id_left: "x",
+    id_right: "check"
+};
+
+const rock_task_c1 = {
+    type: jsPsychVideoHotspots,
+    stimulus: rock_1.stimulus,
+    hotspots: [{
+            id: rock_1.id_left,
+            x: 75,
+            y: 275,
+            width: 325,
+            height: 325,
+        },
+        {
+            id: rock_1.id_right,
+            x: 650,
+            y: 275,
+            width: 325,
+            height: 325,
+        }
+    ],
+    hotspot_highlight_css: 'background-color: rgba(255, 0, 0, 0.3); border: 2px solid red;'
+};
+
+const rock_task_c2 = {
+    type: jsPsychVideoHotspots,
+    stimulus: rock_2.stimulus,
+    hotspots: [{
+            id: rock_2.id_left,
+            x: 75,
+            y: 275,
+            width: 325,
+            height: 325,
+        },
+        {
+            id: rock_2.id_right,
+            x: 650,
+            y: 275,
+            width: 325,
+            height: 325,
+        }
+    ],
+    hotspot_highlight_css: 'background-color: rgba(255, 0, 0, 0.3); border: 2px solid red;'
+};
+
+//cloud
+//c1
+const cloud_1 = {
+    stimulus: "https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/closed_HI_object_cloud_c1_video.m4v",
+    id_left: "check",
+    id_right: "x"
+};
+
+//c2
+const cloud_2 = {
+    stimulus: "https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/closed_HI_object_cloud_c2_video.m4v",
+    id_left: "x",
+    id_right: "check"
+};
+
+const cloud_task_c1 = {
+    type: jsPsychVideoHotspots,
+    stimulus: cloud_1.stimulus,
+    hotspots: [{
+            id: cloud_1.id_left,
+            x: 75,
+            y: 275,
+            width: 325,
+            height: 325,
+        },
+        {
+            id: cloud_1.id_right,
+            x: 650,
+            y: 275,
+            width: 325,
+            height: 325,
+        }
+    ],
+    hotspot_highlight_css: 'background-color: rgba(255, 0, 0, 0.3); border: 2px solid red;'
+};
+
+const cloud_task_c2 = {
+    type: jsPsychVideoHotspots,
+    stimulus: cloud_2.stimulus,
+    hotspots: [{
+            id: cloud_2.id_left,
+            x: 75,
+            y: 275,
+            width: 325,
+            height: 325,
+        },
+        {
+            id: cloud_2.id_right,
+            x: 650,
+            y: 275,
+            width: 325,
+            height: 325,
+        }
+    ],
+    hotspot_highlight_css: 'background-color: rgba(255, 0, 0, 0.3); border: 2px solid red;'
+};
+
+//bike
+//c1
+const bike_1 = {
+    stimulus: "https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/closed_HI_object_bike_c1.mp4",
+    id_left: "check",
+    id_right: "x"
+};
+
+//c2
+const bike_2 = {
+    stimulus: "https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/closed_HI_object_bike_c2.mp4",
+    id_left: "x",
+    id_right: "check"
+};
+
+const bike_task_c1 = {
+    type: jsPsychVideoHotspots,
+    stimulus: bike_1.stimulus,
+    hotspots: [{
+            id: bike_1.id_left,
+            x: 125,
+            y: 350,
+            width: 325,
+            height: 325,
+        },
+        {
+            id: bike_1.id_right,
+            x: 845,
+            y: 350,
+            width: 325,
+            height: 325,
+        }
+    ],
+    hotspot_highlight_css: 'background-color: rgba(255, 0, 0, 0.3); border: 2px solid red;'
+};
+
+const bike_task_c2 = {
+    type: jsPsychVideoHotspots,
+    stimulus: bike_2.stimulus,
+    hotspots: [{
+            id: bike_2.id_left,
+            x: 125,
+            y: 350,
+            width: 325,
+            height: 325,
+        },
+        {
+            id: bike_2.id_right,
+            x: 845,
+            y: 350,
+            width: 325,
+            height: 325,
+        }
+    ],
+    hotspot_highlight_css: 'background-color: rgba(255, 0, 0, 0.3); border: 2px solid red;'
+};
+
+//randomization (counterbalancing)
+
+const non_narrated_array_c1 = [baby_task_c1, adult_task_c1, worm_task_c1, squirrel_task_c1, flower_task_c1, rock_task_c1, cloud_task_c1, bike_task_c1];
+const non_narrated_array_c2 = [baby_task_c2, adult_task_c2, worm_task_c2, squirrel_task_c2, flower_task_c2, rock_task_c2, cloud_task_c2, bike_task_c2];
+
+const non_narrated_c1 = jsPsych.randomization.shuffleNoRepeats(non_narrated_array_c1);
+const non_narrated_c2 = jsPsych.randomization.shuffleNoRepeats(non_narrated_array_c2);
+
+const nature_progression_c1 = [closed_intr_c1, narrated_c1, ...non_narrated_c1];
+const nature_progression_c2 = [closed_intr_c2, narrated_c2, ...non_narrated_c2];
+
+const rand_nature_selection = jsPsych.randomization
+    .sampleWithoutReplacement([nature_progression_c1, nature_progression_c2], 1)[0];
+
+timeline.push(...rand_nature_selection);
+
+
+// --------
+
+
+//systems thinking tasks (awab is working on these)
+
+
+// --------
+
+
+//relation verification
+
+const rel_ver_trans = {
+    type: jsPsychVideoButtonResponse,
+    stimulus: ['https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/rel_ver_trans.mp4'],
+    width: 640,
+    height: 360,
+    trial_ends_after_video: true,
+    choices: [],
+};
+
+timeline.push(rel_ver_trans);
+
+const rel_ver_follow_why = {
+    type: jsPsychVideoButtonResponse,
+    stimulus: ['https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/rel_ver_follow_why.mp4'],
+    width: 640,
+    height: 360,
+    choices: ['Next'],
+    button_html: (choice) => `<button style="font-size:2em; width: 150px; height: 100px; margin: 20px; background-color: lightblue; cursor: pointer;">${choice}</button>`,
+    response_allowed_while_playing: false
+};
+
+//CA
+
+
+// ----- SEPARATE THE SARCAS
+
+
+//sarca
+//eco sarca cac1
+const rel_eco_sarca_cac1 = {
+    type: jsPsychVideoButtonResponse,
+    stimulus: ['https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/rel_ver_eco_sarca_ca_c1.mp4'],
+    width: 640,
+    height: 360,
+    choices: ['Yes', 'No'],
+    button_html: (choice) => `<button style="font-size:2em; width: 150px; height: 100px; margin: 20px; background-color: lightgreen; cursor: pointer;">${choice}</button>`,
+    response_allowed_while_playing: false
+};
+
+//eco sarca cac2
+const rel_eco_sarca_cac2 = {
+    type: jsPsychVideoButtonResponse,
+    stimulus: ['https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/rel_ver_eco_sarca_ca_c2.mp4'],
+    width: 640,
+    height: 360,
+    choices: ['Yes', 'No'],
+    button_html: (choice) => `<button style="font-size:2em; width: 150px; height: 100px; margin: 20px; background-color: lightgreen; cursor: pointer;">${choice}</button>`,
+    response_allowed_while_playing: false
+};
+
+const rand_eco_sarca_ca = jsPsych.randomization.sampleWithoutReplacement([rel_eco_sarca_cac1, rel_eco_sarca_cac2], 1)[0];
+
+const eco_relver_sarca_ca = {
+    timeline: [
+        rand_eco_sarca_ca,
+        rel_ver_follow_why
+    ]
+};
+
+//tax sarca cac1
+const rel_tax_sarca_cac1 = {
+    type: jsPsychVideoButtonResponse,
+    stimulus: ['https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/rel_ver_tax_sarca_ca_c1.mp4'],
+    width: 640,
+    height: 360,
+    choices: ['Yes', 'No'],
+    button_html: (choice) => `<button style="font-size:2em; width: 150px; height: 100px; margin: 20px; background-color: lightgreen; cursor: pointer;">${choice}</button>`,
+    response_allowed_while_playing: false
+};
+
+//tax sarca cac2
+const rel_tax_sarca_cac2 = {
+    type: jsPsychVideoButtonResponse,
+    stimulus: ['https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/rel_ver_tax_sarca_ca_c2.mp4'],
+    width: 640,
+    height: 360,
+    choices: ['Yes', 'No'],
+    button_html: (choice) => `<button style="font-size:2em; width: 150px; height: 100px; margin: 20px; background-color: lightgreen; cursor: pointer;">${choice}</button>`,
+    response_allowed_while_playing: false
+};
+
+const rand_tax_sarca_ca = jsPsych.randomization.sampleWithoutReplacement([rel_tax_sarca_cac1, rel_tax_sarca_cac2], 1)[0];
+
+const tax_relver_sarca_ca = {
+    timeline: [
+        rand_tax_sarca_ca,
+        rel_ver_follow_why
+    ]
+};
+
+
+// ------- SEPARATE THE SARCAS
+
+
+
+//kaki
+//eco kaki cac1
+const rel_eco_kaki_cac1 = {
+    type: jsPsychVideoButtonResponse,
+    stimulus: ['https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/rel_ver_eco_kaki_ca_c1.mp4'],
+    width: 640,
+    height: 360,
+    choices: ['Yes', 'No'],
+    button_html: (choice) => `<button style="font-size:2em; width: 150px; height: 100px; margin: 20px; background-color: lightgreen; cursor: pointer;">${choice}</button>`,
+    response_allowed_while_playing: false
+};
+
+//eco kaki cac2
+const rel_eco_kaki_cac2 = {
+    type: jsPsychVideoButtonResponse,
+    stimulus: ['https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/rel_ver_eco_kaki_ca_c2.mp4'],
+    width: 640,
+    height: 360,
+    choices: ['Yes', 'No'],
+    button_html: (choice) => `<button style="font-size:2em; width: 150px; height: 100px; margin: 20px; background-color: lightgreen; cursor: pointer;">${choice}</button>`,
+    response_allowed_while_playing: false
+};
+const rand_eco_kaki_ca = jsPsych.randomization.sampleWithoutReplacement([rel_eco_kaki_cac1, rel_eco_kaki_cac2], 1)[0];
+
+const eco_relver_kaki_ca = {
+    timeline: [
+        rand_eco_kaki_ca,
+        rel_ver_follow_why
+    ]
+};
+
+//tax kaki cac1
+const rel_tax_kaki_cac1 = {
+    type: jsPsychVideoButtonResponse,
+    stimulus: ['https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/rel_ver_tax_kaki_ca_c1.mp4'],
+    width: 640,
+    height: 360,
+    choices: ['Yes', 'No'],
+    button_html: (choice) => `<button style="font-size:2em; width: 150px; height: 100px; margin: 20px; background-color: lightgreen; cursor: pointer;">${choice}</button>`,
+    response_allowed_while_playing: false
+};
+
+//tax kaki cac2
+const rel_tax_kaki_cac2 = {
+    type: jsPsychVideoButtonResponse,
+    stimulus: ['https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/rel_ver_tax_kaki_ca_c2%20(1).mp4'],
+    width: 640,
+    height: 360,
+    choices: ['Yes', 'No'],
+    button_html: (choice) => `<button style="font-size:2em; width: 150px; height: 100px; margin: 20px; background-color: lightgreen; cursor: pointer;">${choice}</button>`,
+    response_allowed_while_playing: false
+};
+
+const rand_tax_kaki_ca = jsPsych.randomization.sampleWithoutReplacement([rel_tax_kaki_cac1, rel_tax_kaki_cac2], 1)[0];
+
+const tax_relver_kaki_ca = {
+    timeline: [
+        rand_tax_kaki_ca,
+        rel_ver_follow_why
+    ]
+};
+
+//andro
+//eco andro cac1
+const rel_eco_andro_cac1 = {
+    type: jsPsychVideoButtonResponse,
+    stimulus: ['https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/rel_ver_eco_andro_ca_c1.mp4'],
+    width: 640,
+    height: 360,
+    choices: ['Yes', 'No'],
+    button_html: (choice) => `<button style="font-size:2em; width: 150px; height: 100px; margin: 20px; background-color: lightgreen; cursor: pointer;">${choice}</button>`,
+    response_allowed_while_playing: false
+};
+
+//eco andro cac2
+const rel_eco_andro_cac2 = {
+    type: jsPsychVideoButtonResponse,
+    stimulus: ['https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/rel_ver_eco_andro_ca_c2.mp4'],
+    width: 640,
+    height: 360,
+    choices: ['Yes', 'No'],
+    button_html: (choice) => `<button style="font-size:2em; width: 150px; height: 100px; margin: 20px; background-color: lightgreen; cursor: pointer;">${choice}</button>`,
+    response_allowed_while_playing: false
+};
+
+const rand_eco_andro_ca = jsPsych.randomization.sampleWithoutReplacement([rel_eco_andro_cac1, rel_eco_andro_cac2], 1)[0];
+
+const eco_relver_andro_ca = {
+    timeline: [
+        rand_eco_andro_ca,
+        rel_ver_follow_why
+    ]
+};
+
+//tax andro cac1
+const rel_tax_andro_cac1 = {
+    type: jsPsychVideoButtonResponse,
+    stimulus: ['https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/rel_ver_tax_andro_ca_c1.mp4'],
+    width: 640,
+    height: 360,
+    choices: ['Yes', 'No'],
+    button_html: (choice) => `<button style="font-size:2em; width: 150px; height: 100px; margin: 20px; background-color: lightgreen; cursor: pointer;">${choice}</button>`,
+    response_allowed_while_playing: false
+};
+
+//tax andro cac2
+const rel_tax_andro_cac2 = {
+    type: jsPsychVideoButtonResponse,
+    stimulus: ['https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/rel_ver_tax_andro_ca_c2.mp4'],
+    width: 640,
+    height: 360,
+    choices: ['Yes', 'No'],
+    button_html: (choice) => `<button style="font-size:2em; width: 150px; height: 100px; margin: 20px; background-color: lightgreen; cursor: pointer;">${choice}</button>`,
+    response_allowed_while_playing: false
+};
+
+const rand_tax_andro_ca = jsPsych.randomization.sampleWithoutReplacement([rel_tax_andro_cac1, rel_tax_andro_cac2], 1)[0];
+
+const tax_relver_andro_ca = {
+    timeline: [
+        rand_tax_andro_ca,
+        rel_ver_follow_why
+    ]
+};
+
+//delp
+//eco delp cac1
+const rel_eco_delp_cac1 = {
+    type: jsPsychVideoButtonResponse,
+    stimulus: ['https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/rel_ver_eco_delp_ca_c1.mp4'],
+    width: 640,
+    height: 360,
+    choices: ['Yes', 'No'],
+    button_html: (choice) => `<button style="font-size:2em; width: 150px; height: 100px; margin: 20px; background-color: lightgreen; cursor: pointer;">${choice}</button>`,
+    response_allowed_while_playing: false
+};
+
+//eco delp cac2
+const rel_eco_delp_cac2 = {
+    type: jsPsychVideoButtonResponse,
+    stimulus: ['https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/rel_ver_eco_delp_ca_c2.mp4'],
+    width: 640,
+    height: 360,
+    choices: ['Yes', 'No'],
+    button_html: (choice) => `<button style="font-size:2em; width: 150px; height: 100px; margin: 20px; background-color: lightgreen; cursor: pointer;">${choice}</button>`,
+    response_allowed_while_playing: false
+};
+
+const rand_eco_delp_ca = jsPsych.randomization.sampleWithoutReplacement([rel_eco_delp_cac1, rel_eco_delp_cac2], 1)[0];
+
+const eco_relver_delp_ca = {
+    timeline: [
+        rand_eco_delp_ca,
+        rel_ver_follow_why
+    ]
+};
+
+//tax delp cac1
+const rel_tax_delp_cac1 = {
+    type: jsPsychVideoButtonResponse,
+    stimulus: ['https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/rel_ver_tax_delp_ca_c1.mp4'],
+    width: 640,
+    height: 360,
+    choices: ['Yes', 'No'],
+    button_html: (choice) => `<button style="font-size:2em; width: 150px; height: 100px; margin: 20px; background-color: lightgreen; cursor: pointer;">${choice}</button>`,
+    response_allowed_while_playing: false
+};
+
+//tax delp cac2
+const rel_tax_delp_cac2 = {
+    type: jsPsychVideoButtonResponse,
+    stimulus: ['https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/rel_ver_tax_delp_ca_c2.mp4'],
+    width: 640,
+    height: 360,
+    choices: ['Yes', 'No'],
+    button_html: (choice) => `<button style="font-size:2em; width: 150px; height: 100px; margin: 20px; background-color: lightgreen; cursor: pointer;">${choice}</button>`,
+    response_allowed_while_playing: false
+};
+
+const rand_tax_delp_ca = jsPsych.randomization.sampleWithoutReplacement([rel_tax_delp_cac1, rel_tax_delp_cac2], 1)[0];
+
+const tax_relver_delp_ca = {
+    timeline: [
+        rand_tax_delp_ca,
+        rel_ver_follow_why
+    ]
+};
+
+//CB
+
+// ------ SEPARATE THE SARCAS
+
+
+//sarca
+//eco sarca cbc1
+const rel_eco_sarca_cbc1 = {
+    type: jsPsychVideoButtonResponse,
+    stimulus: ['https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/rel_ver_eco_sarca_cb_c1.mp4'],
+    width: 640,
+    height: 360,
+    choices: ['Yes', 'No'],
+    button_html: (choice) => `<button style="font-size:2em; width: 150px; height: 100px; margin: 20px; background-color: lightgreen; cursor: pointer;">${choice}</button>`,
+    response_allowed_while_playing: false
+};
+
+//eco sarca cbc2
+const rel_eco_sarca_cbc2 = {
+    type: jsPsychVideoButtonResponse,
+    stimulus: ['https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/rel_ver_eco_sarca_cb_c2.mp4'],
+    width: 640,
+    height: 360,
+    choices: ['Yes', 'No'],
+    button_html: (choice) => `<button style="font-size:2em; width: 150px; height: 100px; margin: 20px; background-color: lightgreen; cursor: pointer;">${choice}</button>`,
+    response_allowed_while_playing: false
+};
+
+const rand_eco_sarca_cb = jsPsych.randomization.sampleWithoutReplacement([rel_eco_sarca_cbc1, rel_eco_sarca_cbc2], 1)[0];
+
+const eco_relver_sarca_cb = {
+    timeline: [
+        rand_eco_sarca_cb,
+        rel_ver_follow_why
+    ]
+};
+
+//tax sarca cbc1
+const rel_tax_sarca_cbc1 = {
+    type: jsPsychVideoButtonResponse,
+    stimulus: ['https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/rel_ver_sarca_tax_cb_c1.mp4'],
+    width: 640,
+    height: 360,
+    choices: ['Yes', 'No'],
+    button_html: (choice) => `<button style="font-size:2em; width: 150px; height: 100px; margin: 20px; background-color: lightgreen; cursor: pointer;">${choice}</button>`,
+    response_allowed_while_playing: false
+};
+
+//tax sarca cbc2
+const rel_tax_sarca_cbc2 = {
+    type: jsPsychVideoButtonResponse,
+    stimulus: ['https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/rel_ver_tax_sarca_cb_c2.mp4'],
+    width: 640,
+    height: 360,
+    choices: ['Yes', 'No'],
+    button_html: (choice) => `<button style="font-size:2em; width: 150px; height: 100px; margin: 20px; background-color: lightgreen; cursor: pointer;">${choice}</button>`,
+    response_allowed_while_playing: false
+};
+
+const rand_tax_sarca_cb = jsPsych.randomization.sampleWithoutReplacement([rel_tax_sarca_cbc1, rel_tax_sarca_cbc2], 1)[0];
+
+const tax_relver_sarca_cb = {
+    timeline: [
+        rand_tax_sarca_cb,
+        rel_ver_follow_why
+    ]
+};
+
+
+// ------ SEPARATE THE SARCAS
+
+
+//kaki
+//eco kaki cbc1
+const rel_eco_kaki_cbc1 = {
+    type: jsPsychVideoButtonResponse,
+    stimulus: ['https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/rel_ver_eco_kaki_cb_c1.mp4'],
+    width: 640,
+    height: 360,
+    choices: ['Yes', 'No'],
+    button_html: (choice) => `<button style="font-size:2em; width: 150px; height: 100px; margin: 20px; background-color: lightgreen; cursor: pointer;">${choice}</button>`,
+    response_allowed_while_playing: false
+};
+
+//eco kaki cbc2
+const rel_eco_kaki_cbc2 = {
+    type: jsPsychVideoButtonResponse,
+    stimulus: ['https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/rel_ver_eco_kaki_cb_c2.mp4'],
+    width: 640,
+    height: 360,
+    choices: ['Yes', 'No'],
+    button_html: (choice) => `<button style="font-size:2em; width: 150px; height: 100px; margin: 20px; background-color: lightgreen; cursor: pointer;">${choice}</button>`,
+    response_allowed_while_playing: false
+};
+
+const rand_eco_kaki_cb = jsPsych.randomization.sampleWithoutReplacement([rel_eco_kaki_cbc1, rel_eco_kaki_cbc2], 1)[0];
+
+const eco_relver_kaki_cb = {
+    timeline: [
+        rand_eco_kaki_cb,
+        rel_ver_follow_why
+    ]
+};
+
+//tax kaki cbc1
+const rel_tax_kaki_cbc1 = {
+    type: jsPsychVideoButtonResponse,
+    stimulus: ['https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/rel_ver_tax_kaki_cb_c1.mp4'],
+    width: 640,
+    height: 360,
+    choices: ['Yes', 'No'],
+    button_html: (choice) => `<button style="font-size:2em; width: 150px; height: 100px; margin: 20px; background-color: lightgreen; cursor: pointer;">${choice}</button>`,
+    response_allowed_while_playing: false
+};
+
+//tax kaki cbc2
+const rel_tax_kaki_cbc2 = {
+    type: jsPsychVideoButtonResponse,
+    stimulus: ['https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/rel_ver_tax_kaki_cb_c2.mp4'],
+    width: 640,
+    height: 360,
+    choices: ['Yes', 'No'],
+    button_html: (choice) => `<button style="font-size:2em; width: 150px; height: 100px; margin: 20px; background-color: lightgreen; cursor: pointer;">${choice}</button>`,
+    response_allowed_while_playing: false
+};
+
+const rand_tax_kaki_cb = jsPsych.randomization.sampleWithoutReplacement([rel_tax_kaki_cbc1, rel_tax_kaki_cbc2], 1)[0];
+
+const tax_relver_kaki_cb = {
+    timeline: [
+        rand_tax_kaki_cb,
+        rel_ver_follow_why
+    ]
+};
+
+//andro
+//eco andro cbc1
+const rel_eco_andro_cbc1 = {
+    type: jsPsychVideoButtonResponse,
+    stimulus: ['https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/rel_ver_eco_andro_cb_c1.mp4'],
+    width: 640,
+    height: 360,
+    choices: ['Yes', 'No'],
+    button_html: (choice) => `<button style="font-size:2em; width: 150px; height: 100px; margin: 20px; background-color: lightgreen; cursor: pointer;">${choice}</button>`,
+    response_allowed_while_playing: false
+};
+
+//eco andro cbc2
+const rel_eco_andro_cbc2 = {
+    type: jsPsychVideoButtonResponse,
+    stimulus: ['https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/rel_ver_eco_andro_cb_c2.mp4'],
+    width: 640,
+    height: 360,
+    choices: ['Yes', 'No'],
+    button_html: (choice) => `<button style="font-size:2em; width: 150px; height: 100px; margin: 20px; background-color: lightgreen; cursor: pointer;">${choice}</button>`,
+    response_allowed_while_playing: false
+};
+
+const rand_eco_andro_cb = jsPsych.randomization.sampleWithoutReplacement([rel_eco_andro_cbc1, rel_eco_andro_cbc2], 1)[0];
+
+const eco_relver_andro_cb = {
+    timeline: [
+        rand_eco_andro_cb,
+        rel_ver_follow_why
+    ]
+};
+
+//tax andro cbc1
+const rel_tax_andro_cbc1 = {
+    type: jsPsychVideoButtonResponse,
+    stimulus: ['https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/rel_ver_tax_andro_cb_c1.mp4'],
+    width: 640,
+    height: 360,
+    choices: ['Yes', 'No'],
+    button_html: (choice) => `<button style="font-size:2em; width: 150px; height: 100px; margin: 20px; background-color: lightgreen; cursor: pointer;">${choice}</button>`,
+    response_allowed_while_playing: false
+};
+
+//tax andro cbc2
+const rel_tax_andro_cbc2 = {
+    type: jsPsychVideoButtonResponse,
+    stimulus: ['https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/rel_ver_tax_andro_cb_c2.mp4'],
+    width: 640,
+    height: 360,
+    choices: ['Yes', 'No'],
+    button_html: (choice) => `<button style="font-size:2em; width: 150px; height: 100px; margin: 20px; background-color: lightgreen; cursor: pointer;">${choice}</button>`,
+    response_allowed_while_playing: false
+};
+
+const rand_tax_andro_cb = jsPsych.randomization.sampleWithoutReplacement([rel_tax_andro_cbc1, rel_tax_andro_cbc2], 1)[0];
+
+const tax_relver_andro_cb = {
+    timeline: [
+        rand_tax_andro_cb,
+        rel_ver_follow_why
+    ]
+};
+
+//delp
+//eco delp cbc1
+const rel_eco_delp_cbc1 = {
+    type: jsPsychVideoButtonResponse,
+    stimulus: ['https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/rel_ver_eco_delp_cb_c1.mp4'],
+    width: 640,
+    height: 360,
+    choices: ['Yes', 'No'],
+    button_html: (choice) => `<button style="font-size:2em; width: 150px; height: 100px; margin: 20px; background-color: lightgreen; cursor: pointer;">${choice}</button>`,
+    response_allowed_while_playing: false
+};
+
+//eco delp cbc2
+const rel_eco_delp_cbc2 = {
+    type: jsPsychVideoButtonResponse,
+    stimulus: ['https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/rel_ver_eco_delp_cb_c2.mp4'],
+    width: 640,
+    height: 360,
+    choices: ['Yes', 'No'],
+    button_html: (choice) => `<button style="font-size:2em; width: 150px; height: 100px; margin: 20px; background-color: lightgreen; cursor: pointer;">${choice}</button>`,
+    response_allowed_while_playing: false
+};
+
+const rand_eco_delp_cb = jsPsych.randomization.sampleWithoutReplacement([rel_eco_delp_cbc1, rel_eco_delp_cbc2], 1)[0];
+
+const eco_relver_delp_cb = {
+    timeline: [
+        rand_eco_delp_cb,
+        rel_ver_follow_why
+    ]
+};
+
+//tax delp cbc1
+const rel_tax_delp_cbc1 = {
+    type: jsPsychVideoButtonResponse,
+    stimulus: ['https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/rel_ver_tax_delp_cb_c1.mp4'],
+    width: 640,
+    height: 360,
+    choices: ['Yes', 'No'],
+    button_html: (choice) => `<button style="font-size:2em; width: 150px; height: 100px; margin: 20px; background-color: lightgreen; cursor: pointer;">${choice}</button>`,
+    response_allowed_while_playing: false
+};
+
+//tax delp cbc2
+const rel_tax_delp_cbc2 = {
+    type: jsPsychVideoButtonResponse,
+    stimulus: ['https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/rel_ver_tax_delp_cb_c2.mp4'],
+    width: 640,
+    height: 360,
+    choices: ['Yes', 'No'],
+    button_html: (choice) => `<button style="font-size:2em; width: 150px; height: 100px; margin: 20px; background-color: lightgreen; cursor: pointer;">${choice}</button>`,
+    response_allowed_while_playing: false
+};
+
+const rand_tax_delp_cb = jsPsych.randomization.sampleWithoutReplacement([rel_tax_delp_cbc1, rel_tax_delp_cbc2], 1)[0];
+
+const tax_relver_delp_cb = {
+    timeline: [
+        rand_tax_delp_cb,
+        rel_ver_follow_why
+    ]
+};
+
+
+//narrated ca (sarcas separated)
+const narrated_relver_ca_array = [eco_relver_sarca_ca, tax_relver_sarca_ca];
+const narrated_relver_ca = jsPsych.randomization.shuffle(narrated_relver_ca_array);
+
+//narrated cb (sarcas separated)
+const narrated_relver_cb_array = [eco_relver_sarca_cb, tax_relver_sarca_cb];
+const narrated_relver_cb = jsPsych.randomization.shuffle(narrated_relver_cb_array);
+
+//normal
+//within tax/eco ca
+const relver_eco_ca_array = [eco_relver_kaki_ca, eco_relver_andro_ca, eco_relver_delp_ca];
+const relver_eco_ca_randomized = jsPsych.randomization.shuffle(relver_eco_ca_array);
+
+const relver_tax_ca_array = [tax_relver_kaki_ca, tax_relver_andro_ca, tax_relver_delp_ca];
+const relver_tax_ca_randomized = jsPsych.randomization.shuffle(relver_tax_ca_array);
+
+//within tax/eco cb
+const relver_eco_cb_array = [eco_relver_kaki_cb, eco_relver_andro_cb, eco_relver_delp_cb];
+const relver_eco_cb_randomized = jsPsych.randomization.shuffle(relver_eco_cb_array);
+
+const relver_tax_cb_array = [tax_relver_kaki_cb, tax_relver_andro_cb, tax_relver_delp_cb];
+const relver_tax_cb_randomized = jsPsych.randomization.shuffle(relver_tax_cb_array);
+
+//randomized tax/eco ca
+const relver_ca_array = [
+    relver_eco_ca_randomized,
+    relver_tax_ca_randomized
+];
+
+const relver_ca_randomized = jsPsych.randomization.shuffle(relver_ca_array).flat();
+
+//randomized tax/eco cb
+const relver_cb_array = [
+    relver_eco_cb_randomized,
+    relver_tax_cb_randomized
+];
+
+const relver_cb_randomized = jsPsych.randomization.shuffle(relver_cb_array).flat();
+
+//progression
+const relver_ca_progression = [narrated_relver_ca, ...relver_ca_randomized];
+const relver_cb_progression = [narrated_relver_cb, ...relver_cb_randomized];
+
+//final randomization
+const rand_relver_selection = jsPsych.randomization.sampleWithoutReplacement([relver_ca_progression, relver_cb_progression], 1)[0];
+
+timeline.push(rand_relver_selection);
+
+
+// --------
+
+
+const stop = {
+    type: chsRecord.StopRecordPlugin,
+};
+
+const exit_survey = {
+    type: chsSurvey.ExitSurveyPlugin,
+};
+
+jsPsych.run(timeline);
