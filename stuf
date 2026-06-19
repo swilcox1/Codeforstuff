@@ -1,0 +1,11 @@
+choices: [
+    'https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/yes_button.png', 
+    'https://raw.githubusercontent.com/efosterhanson/CHS_stims/main/ProjectSprouts/no_button.png'
+  ], 
+  button_html: (choice, choice_index) => { 
+    return `<button style="font-size:2em; width: 200px; height: 200px; margin: 10px 150px; background-color: white; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;gap: 100px;">
+              <img src="${choice}" alt="Choice ${choice_index}" style="max-width: 100%; max-height: 100%; object-fit: contain;" />
+            </button>`; 
+  }, 
+  response_allowed_while_playing: false 
+};
